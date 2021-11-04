@@ -37,37 +37,12 @@ app.get("/api/:date", function (req, res) {
 	}
 	const utcValue = date.toUTCString();
 	const unixValue = date.getTime();
-	res.json({ unix: unixValue, utc: utcValue });
+	if (isNaN(unixValue) || utcValue === "Invalid Date") {
+		res.json({ error: utcValue });
+	} else {
+		res.json({ unix: unixValue, utc: utcValue });
+	}
 });
-
-function timeConverter(UNIX_timestamp) {
-	var a = new Date(UNIX_timestamp);
-	console.log("a date is:", a);
-	var months = [
-		"Jan",
-		"Feb",
-		"Mar",
-		"Apr",
-		"May",
-		"Jun",
-		"Jul",
-		"Aug",
-		"Sep",
-		"Oct",
-		"Nov",
-		"Dec",
-	];
-	var year = a.getFullYear();
-	var month = months[a.getMonth()];
-	var date = a.getDate();
-	var hour = a.getHours();
-	var min = a.getMinutes();
-	var sec = a.getSeconds();
-	var time =
-		date + " " + month + " " + year + " " + hour + ":" + min + ":" + sec;
-	console.log(time);
-	return time;
-}
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT || 3000, function () {
