@@ -31,6 +31,33 @@ app.get("/api/:date", function (req, res) {
 	res.json({ unix: Number(req.params.date), utc: date.toString() });
 });
 
+function timeConverter(UNIX_timestamp) {
+	var a = new Date(UNIX_timestamp * 1000);
+	var months = [
+		"Jan",
+		"Feb",
+		"Mar",
+		"Apr",
+		"May",
+		"Jun",
+		"Jul",
+		"Aug",
+		"Sep",
+		"Oct",
+		"Nov",
+		"Dec",
+	];
+	var year = a.getFullYear();
+	var month = months[a.getMonth()];
+	var date = a.getDate();
+	var hour = a.getHours();
+	var min = a.getMinutes();
+	var sec = a.getSeconds();
+	var time =
+		date + " " + month + " " + year + " " + hour + ":" + min + ":" + sec;
+	return time;
+}
+
 // listen for requests :)
 var listener = app.listen(process.env.PORT || 3000, function () {
 	console.log("Your app is listening on port " + process.env.PORT);
