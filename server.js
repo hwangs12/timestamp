@@ -23,16 +23,26 @@ app.get("/", function (req, res) {
 // your first API endpoint...
 app.get("/api", function (req, res) {
 	const date = new Date();
-	res.json({ unix: Date.now(), utc: date.toUTCString() });
+	const Utc = date.toUTCString();
+	const now = date.getTime();
+	res.json({ unix: now, utc: Utc });
 });
 
 app.get("/api/:date", function (req, res) {
-	const date = new Date(Number(req.params.date) * 1000);
-	res.json({ unix: Number(req.params.date), utc: date.toString() });
+	let date;
+	if (isNaN(Number(req.params.date))) {
+		date = new Date(req.params.date);
+	} else {
+		date = new Date(parseInt(req.params.date));
+	}
+	const utcValue = date.toUTCString();
+	const unixValue = date.getTime();
+	res.json({ unix: unixValue, utc: utcValue });
 });
 
 function timeConverter(UNIX_timestamp) {
-	var a = new Date(UNIX_timestamp * 1000);
+	var a = new Date(UNIX_timestamp);
+	console.log("a date is:", a);
 	var months = [
 		"Jan",
 		"Feb",
@@ -55,6 +65,7 @@ function timeConverter(UNIX_timestamp) {
 	var sec = a.getSeconds();
 	var time =
 		date + " " + month + " " + year + " " + hour + ":" + min + ":" + sec;
+	console.log(time);
 	return time;
 }
 
